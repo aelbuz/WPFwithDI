@@ -1,0 +1,11 @@
+﻿<Window x:Class="WPFAppWithDependencyInjection.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="WPF with DI"
+        WindowStartupLocation="CenterScreen"
+        Height="720" Width="1280">
+
+    <Grid>
+        <TextBlock Text="MainWindowViewModel content" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    </Grid>
+</Window>
