@@ -1,6 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using System;
 using System.Windows;
 using WPFAppWithDependencyInjection.Services;
+using WPFAppWithDependencyInjection.Types;
 
 namespace WPFAppWithDependencyInjection
 {
@@ -9,15 +13,14 @@ namespace WPFAppWithDependencyInjection
     /// </summary>
     public partial class App : Application
     {
-        private readonly ServiceProvider serviceProvider;
+        private readonly IServiceProvider serviceProvider;
 
         private MainWindowViewModel? mainWindowVm;
 
         public App()
         {
             var services = new ServiceCollection();
-            ConfigureServices(services);
-            serviceProvider = services.BuildServiceProvider();
+            serviceProvider = ConfigureServices(services);
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -34,10 +37,21 @@ namespace WPFAppWithDependencyInjection
             base.OnStartup(e);
         }
 
-        private static void ConfigureServices(ServiceCollection services)
+        private static IServiceProvider ConfigureServices(ServiceCollection services)
         {
+            // Add view-model factory service.
             services.AddTransient(typeof(IFactory<>), typeof(Factory<>));
+
             services.AddSingleton<IIntService, IntManager>();
+
+            // Add options service.
+            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            services.AddSingleton<IConfiguration>(configuration);
+            var applicationSettings = new ApplicationSettings();
+            configuration.Bind(nameof(ApplicationSettings), applicationSettings);
+            services.AddSingleton(Options.Create(applicationSettings));
+
+            return services.BuildServiceProvider();
         }
     }
 }

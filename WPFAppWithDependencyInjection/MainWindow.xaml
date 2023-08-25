@@ -6,6 +6,19 @@
         Height="720" Width="1280">
 
     <Grid>
-        <TextBlock Text="MainWindowViewModel content" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Text="MainWindowViewModel content"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="Int value from settings: " FontWeight="Bold"/>
+            <TextBlock Text="{Binding IntValue}"/>
+        </StackPanel>
     </Grid>
 </Window>

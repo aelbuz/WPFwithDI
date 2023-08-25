@@ -1,18 +1,23 @@
-﻿using WPFAppWithDependencyInjection.Services;
+﻿using Microsoft.Extensions.Options;
+using WPFAppWithDependencyInjection.Services;
+using WPFAppWithDependencyInjection.Types;
 
 namespace WPFAppWithDependencyInjection
 {
     public class MainWindowViewModel
     {
-        public MainWindowViewModel(IIntService intService)
+        public MainWindowViewModel(IOptions<ApplicationSettings> appSettings, IIntService intService)
         {
             int value = intService.GetValue();
             if (value == 0)
             {
-                intService.SetValue(177013);
+                var defaultValue = appSettings.Value.DefaultIntValue;
+                intService.SetValue(defaultValue);
             }
 
-            int newValue = intService.GetValue();
+            IntValue = intService.GetValue();
         }
+
+        public int IntValue { get; private set; }
     }
 }
