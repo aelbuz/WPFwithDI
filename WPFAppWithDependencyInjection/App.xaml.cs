@@ -1,7 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NLog.Extensions.Logging;
 using System;
+using System.IO;
+using System.Reflection;
 using System.Windows;
 using WPFAppWithDependencyInjection.Services;
 using WPFAppWithDependencyInjection.Types;
@@ -44,9 +48,27 @@ namespace WPFAppWithDependencyInjection
 
             services.AddSingleton<IIntService, IntManager>();
 
-            // Add options service.
-            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json")
+                                                          .AddJsonFile("NLog.json")
+                                                          .Build();
             services.AddSingleton<IConfiguration>(configuration);
+
+            // Configure and add logging service.
+            services.AddLogging(logBuilder =>
+            {
+                logBuilder.AddConfiguration(configuration.GetSection("Logging")).AddNLog(new NLogProviderOptions
+                {
+                    RemoveLoggerFactoryFilter = false,
+                });
+            });
+
+            // Set log directory to %appdata% and use it in NLog.json.
+            string baseLogDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string appName = Assembly.GetExecutingAssembly().GetName().Name!;
+            baseLogDir = Path.Combine(baseLogDir, appName);
+            configuration["baseLogDir"] = baseLogDir;
+
+            // Configure and add options service.
             var applicationSettings = new ApplicationSettings();
             configuration.Bind(nameof(ApplicationSettings), applicationSettings);
             services.AddSingleton(Options.Create(applicationSettings));

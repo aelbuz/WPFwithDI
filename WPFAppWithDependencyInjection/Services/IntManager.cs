@@ -1,4 +1,6 @@
-﻿namespace WPFAppWithDependencyInjection.Services
+﻿using System;
+
+namespace WPFAppWithDependencyInjection.Services
 {
     public class IntManager : IIntService
     {
@@ -6,6 +8,11 @@
 
         public int GetValue()
         {
+            if (value == 0)
+            {
+                throw new ArgumentException("Current value is invalid.");
+            }
+
             return value;
         }
 

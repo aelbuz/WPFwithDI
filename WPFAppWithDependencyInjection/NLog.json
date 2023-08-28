@@ -1,0 +1,40 @@
+{
+  "nlog": {
+    "autoReload": true,
+    "throwConfigExceptions": true,
+    "variables": {
+      "debugLogPath": "${configsetting:baseLogDir}/Logs/Debug",
+      "errorLogPath": "${configsetting:baseLogDir}/Logs/Error"
+    },
+    "targets": {
+      "debugFile": {
+        "type": "File",
+        "layout": {
+          "type": "SimpleLayout",
+          "text": "${longdate} ${uppercase:${level}} ${logger} ${machinename} ${callsite} ${message} ${exception:format=tostring}"
+        },
+        "fileName": "${var:debugLogPath}/${date:format=yyyy-MM-dd}.log"
+      },
+      "errorFile": {
+        "type": "File",
+        "layout": {
+          "type": "SimpleLayout",
+          "text": "${longdate} ${uppercase:${level}} ${logger} ${machinename} ${callsite} ${message} ${exception:format=tostring}"
+        },
+        "fileName": "${var:errorLogPath}/${date:format=yyyy-MM-dd}.log"
+      }
+    },
+    "rules": [
+      {
+        "logger": "*",
+        "minLevel": "Debug",
+        "writeTo": "debugFile"
+      },
+      {
+        "logger": "*",
+        "minLevel": "Error",
+        "writeTo": "errorFile"
+      }
+    ]
+  }
+}
