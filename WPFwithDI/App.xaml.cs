@@ -12,9 +12,6 @@ using WPFAppWithDependencyInjection.Types;
 
 namespace WPFAppWithDependencyInjection
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
         private readonly IServiceProvider serviceProvider;

@@ -48,9 +48,9 @@ namespace WPFAppWithDependencyInjection
             }
         }
 
-        private int TrySetValue()
+        private void TrySetValue()
         {
-            var defaultValue = appSettings.Value.DefaultIntValue;
+            int defaultValue = appSettings.Value.DefaultIntValue;
             intService.SetValue(defaultValue);
 
             int value = intService.GetValue();
@@ -58,8 +58,6 @@ namespace WPFAppWithDependencyInjection
             {
                 logger.LogDebug("Successfully set value to {Value}.", value);
             }
-
-            return value;
         }
     }
 }
